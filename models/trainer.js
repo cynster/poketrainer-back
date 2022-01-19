@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       mainColor: {
         type: DataTypes.STRING, 
-        allowNull: false,
+        allowNull: true,
       },
       secondaryColor: {
         type: DataTypes.STRING, 
-        allowNull: false,
+        allowNull: true,
       },
       buddy: {
         type: DataTypes.INTEGER, 
