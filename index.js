@@ -3,10 +3,9 @@ const corsMiddleWare = require("cors");
 const authRouter = require("./routers/auth");
 const trainerRouter = require("./routers/trainers");
 
-
 // Create an express app
 const app = express();
-const PORT = process.env.PORT || 4000;
+const { PORT } = require("./config/constants");
 
 // CORS middleware: Since our api is hosted on a different domain than our client
 // we are are doing "Cross Origin Resource Sharing" (cors)
@@ -22,8 +21,8 @@ app.use("/auth", authRouter);
 app.use("/trainers", trainerRouter);
 
 app.listen(PORT, () => {
-    console.log(`PokeTrainer server started.`);
-    console.log(`Listening on port: ${PORT}`);
-    console.log(`To stop the server: Ctrl + C`);
-    console.log(`Log:`);
-  });
+  console.log(`PokeTrainer server started.`);
+  console.log(`Listening on port: ${PORT}`);
+  console.log(`To stop the server: Ctrl + C`);
+  console.log(`Log:`);
+});
