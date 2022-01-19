@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      trainer.belongsTo(models.party, {
+      trainer.belongsToMany(models.party, {
         through: "trainersParties",
         foreignKey: "trainerId",
       });
