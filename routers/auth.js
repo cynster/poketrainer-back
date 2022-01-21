@@ -71,4 +71,16 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// The /me endpoint can be used to:
+// - get the trainers email & name using only their token
+// - checking if a token is (still) valid
+router.get("/me", authMiddleware, async (req, res) => {
+    const trainer = await Trainer.findOne({
+      where: { trainerId: req.trainer.id },
+    });
+    // don't send back the password hash
+    delete req.trainer.dataValues["password"];
+    res.status(200).send({ ...req.trainer.dataValues });
+  });
+
 module.exports = router;

@@ -6,23 +6,23 @@ const Trainer = require("../models").trainer;
 const parties = require("../models").party;
 
 // CREATE A TRAINER
-router.post("/", async (req, res, next) => {
-  try {
-    const { email, password, username } = req.body;
-    if (!email || !password || !username) {
-      res.status(400).send("missing parameters; email, password or username");
-    } else {
-      const newTrainer = await Trainer.create({
-        email,
-        password,
-        username,
-      });
-      res.json(newTrainer);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
+// router.post("/", async (req, res, next) => {
+//   try {
+//     const { email, password, username } = req.body;
+//     if (!email || !password || !username) {
+//       res.status(400).send("missing parameters; email, password or username");
+//     } else {
+//       const newTrainer = await Trainer.create({
+//         email,
+//         password,
+//         username,
+//       });
+//       res.json(newTrainer);
+//     }
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
 // GET ALL TRAINERS
 // router.get("/", async (req, res, next) => {
@@ -68,17 +68,50 @@ router.get("/", async (req, res) => {
 });
 
 // GET SPECIFIC TRAINER by id
-router.get("/:id", async (req, res) => {
+router.get("/trainer/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     console.log(`GET REQUEST - Trainer by id:`);
     const trainer = await Trainer.findByPk(id, {
       attributes: { exclude: ["password", "email"] },
+      include: [
+        {
+          model: parties,
+          attributes: [
+            "firstPokemon",
+            "secondPokemon",
+            "thirdPokemon",
+            "fourthPokemon",
+            "fifthPokemon",
+            "sixthPokemon",
+          ],
+        },
+      ],
     });
     if (!trainer) {
       res.status(404).send("Trainer not found");
     } else {
       res.status(200).send({ message: "ok", trainer });
+    }
+  } catch (e) {
+    res.send("Something went wrong");
+    console.log(`GOT ERROR:`);
+    console.log(e);
+  }
+});
+
+// GET
+router.get("/count", async (req, res) => {
+  try {
+    console.log(`GET REQUEST - total number of trainers:`);
+    const trainers = await Trainer.count().then((count) => {
+      return count;
+    });
+
+    if (!trainers) {
+      res.status(404).send("None counted");
+    } else {
+      res.status(200).send({ message: "ok", trainers });
     }
   } catch (e) {
     res.send("Something went wrong");
