@@ -2,6 +2,7 @@ const express = require("express");
 const corsMiddleWare = require("cors");
 const authRouter = require("./routers/auth");
 const trainerRouter = require("./routers/trainers");
+const pokemonRouter = require("./routers/pokemon");
 
 // Create an express app
 const app = express();
@@ -19,6 +20,7 @@ app.use(bodyParserMiddleWare);
 // Routes
 app.use("/auth", authRouter);
 app.use("/trainers", trainerRouter);
+app.use("/pokemon", pokemonRouter);
 
 app.listen(PORT, () => {
   console.log(`PokeTrainer server started.`);

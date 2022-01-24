@@ -25,22 +25,12 @@ const parties = require("../models").party;
 // });
 
 // GET ALL TRAINERS
-// router.get("/", async (req, res, next) => {
-//   try {
-//     console.log(`GET REQUEST - All Trainers:`);
-//     const trainers = await Trainer.findAll();
-//     res.send(trainers);
-//   } catch (e) {
-//     res.send("Something went wrong");
-//     console.log(`GOT ERROR:`);
-//     console.log(e);
-//   }
-// });
-
 router.get("/", async (req, res) => {
   try {
     const limit = req.query.limit || 10;
     const offset = req.query.offset || 0;
+    const order = req.query.order || "DESC";
+    const by = req.query.by || "createdAt";
     const trainers = await Trainer.findAndCountAll({
       limit,
       offset,
@@ -58,6 +48,7 @@ router.get("/", async (req, res) => {
         },
       ],
       attributes: { exclude: ["password", "email"] },
+      order: [[by, order]],
     });
     res.status(200).send({ message: "ok", trainers });
   } catch (e) {
@@ -100,18 +91,16 @@ router.get("/trainer/:id", async (req, res) => {
   }
 });
 
-// GET
+// GET NUMBER OF TRAINERS //Can be made more efficient useing .count()
 router.get("/count", async (req, res) => {
   try {
-    console.log(`GET REQUEST - total number of trainers:`);
-    const trainers = await Trainer.count().then((count) => {
-      return count;
-    });
-
-    if (!trainers) {
-      res.status(404).send("None counted");
+    const trainersCount = await Trainer.findAll();
+    if (!trainersCount.length) {
+      return res.status(404).send("None counted");
     } else {
-      res.status(200).send({ message: "ok", trainers });
+      return res
+        .status(200)
+        .send({ message: "ok", trainersCount: trainersCount.length });
     }
   } catch (e) {
     res.send("Something went wrong");
@@ -119,23 +108,5 @@ router.get("/count", async (req, res) => {
     console.log(e);
   }
 });
-
-// GET SPECIFIC TRAINER by username //////////////////////DOESNT WORK YET
-// router.get("/trainer/:username", async (req, res) => {
-//   try {
-//     const username = parseInt(req.params.username);
-//     console.log(`GET REQUEST - Trainer by username:`);
-//     const trainer = await Trainer.findOne({ where: { username: username } });
-//     if (!trainer) {
-//       res.status(404).send("Trainer not found");
-//     } else {
-//       res.send(trainer);
-//     }
-//   } catch (e) {
-//     res.send("Something went wrong");
-//     console.log(`GOT ERROR:`);
-//     console.log(e);
-//   }
-// });
 
 module.exports = router;
