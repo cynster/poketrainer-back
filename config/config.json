@@ -1,6 +1,6 @@
 {
   "development": {
-    "url": "postgres://zvepkgca:Pxkr4SjrRA_XZrT4J0nrJFFen8e2viUT@tyke.db.elephantsql.com/zvepkgca"
+    "url": ""
   },
   "test": {
     "username": "root",
