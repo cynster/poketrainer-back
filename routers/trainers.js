@@ -5,25 +5,6 @@ const router = new Router();
 const Trainer = require("../models").trainer;
 const parties = require("../models").party;
 
-// CREATE A TRAINER
-// router.post("/", async (req, res, next) => {
-//   try {
-//     const { email, password, username } = req.body;
-//     if (!email || !password || !username) {
-//       res.status(400).send("missing parameters; email, password or username");
-//     } else {
-//       const newTrainer = await Trainer.create({
-//         email,
-//         password,
-//         username,
-//       });
-//       res.json(newTrainer);
-//     }
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-
 // GET ALL TRAINERS
 router.get("/", async (req, res) => {
   try {
@@ -108,5 +89,21 @@ router.get("/count", async (req, res) => {
     console.log(e);
   }
 });
+
+// PATCH - update trainer details
+// router.patch("/:id", auth, async (req, res) => {
+//   const trainer = await Trainer.findByPk(req.params.id);
+//   if (!trainer.trainerId === req.trainer.id) {
+//     return res
+//       .status(403)
+//       .send({ message: "You are not authorized to update this trainer" });
+//   }
+
+//   const { image, buddy, mainColor, secondaryColor } = req.body;
+
+//   await trainer.update({ image, buddy, mainColor, secondaryColor });
+
+//   return res.status(200).send({ trainer });
+// });
 
 module.exports = router;
