@@ -1,4 +1,4 @@
-## Poketrainer!
+## Poketrainer! <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/8303.png" width="30" height="30" />
 To make this application functional, you'll need to run the [Poketrainer-front](https://github.com/cynster/poketrainer-front)end as well.
 
 # To setup:
