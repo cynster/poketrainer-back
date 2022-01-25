@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
 router.get("/trainer/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    console.log(`GET REQUEST - Trainer by id:`);
+    console.log(`GET REQUEST - Trainer by id(${id}):`);
     const trainer = await Trainer.findByPk(id, {
       attributes: { exclude: ["password", "email"] },
       include: [

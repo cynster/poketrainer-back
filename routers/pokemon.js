@@ -1,4 +1,4 @@
-const axios = require("axios")
+const axios = require("axios");
 
 // Import Express router
 const { Router } = require("express");
@@ -11,10 +11,11 @@ router.get("/:id", async (req, res) => {
   try {
     // Making sure that data is integer
     const id = parseInt(req.params.id);
-    console.log(`GET REQUEST - Pokemon by id:`);
+    console.log(`GET REQUEST - Pokemon by id (${id}):`);
     const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
 
     // Creating object with data that is needed
+    // Not all pokemon have 2 types
     const pokemon = {
       id: response.data.id,
       name: response.data.name,
@@ -22,22 +23,19 @@ router.get("/:id", async (req, res) => {
       weight: response.data.weight, // weight in hectograms
       height: response.data.height, // height in decimetres
       type1: response.data.types[0].type.name,
-      type2: response.data.types[1].type.name,
-    }
- 
-    console.log("resp", pokemon);
+      type2: response.data.types[1] ? response.data.types[1].type.name
+        : null,
+    };
     res.status(200).send({ message: "ok", pokemon });
-    if (!response){
+    if (!response) {
       console.log(e.message);
       res.status(404).send("Pokemon not found");
-    }else{
+    } else {
       res.status(200).send({ message: "ok", response });
     }
-
   } catch (e) {
     console.log(e.message);
   }
-
 });
 
 module.exports = router;
