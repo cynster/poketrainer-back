@@ -4,11 +4,12 @@ const router = new Router();
 
 const Trainer = require("../models").trainer;
 const parties = require("../models").party;
+const trainersParties = require("../models").trainersParties;
 
 // GET ALL TRAINERS
 router.get("/", async (req, res) => {
   try {
-    const limit = req.query.limit || 10;
+    const limit = req.query.limit || 100;
     const offset = req.query.offset || 0;
     const order = req.query.order || "DESC";
     const by = req.query.by || "createdAt";
@@ -72,6 +73,97 @@ router.get("/trainer/:id", async (req, res) => {
   }
 });
 
+//PATCH - UPDATE SPECIFIC TRAINER
+router.patch("/:id", async (req, res) => {
+  const trainer = await Trainer.findByPk(req.params.id);
+
+  //NOT SECURE ATM
+  // if (!trainer.id === req.trainer.id) {
+  //   return res
+  //     .status(403)
+  //     .send({ message: "You are not authorized to update this trainer" });
+  // }
+
+  const { image, buddy, mainColor, secondaryColor } = req.body;
+
+  await trainer.update({ image, buddy, mainColor, secondaryColor });
+  delete trainer.dataValues["password"];
+  return res.status(200).send({ trainer });
+});
+
+// POST - CREATE NEW POKEMON PARTY
+router.post("/party/:id", async (req, res) => {
+  console.log(
+    `POST - CREATE NEW TRAINER PARTY FOR TRAINER (${req.params.id}):`
+  );
+  try {
+    const newParty = await Party.create({
+      firstPokemon: 25,
+      secondPokemon: null,
+      thirdPokemon: null,
+      fourthPokemon: null,
+      fifthPokemon: null,
+      sixthPokemon: null,
+    });
+  } catch (e) {
+    res.send("Something went wrong");
+    console.log(`GOT ERROR:`);
+    console.log(e);
+  }
+});
+
+//PATCH - UPDATE EXISTING POKEMON PARTY
+router.patch("/party/:id", async (req, res) => {
+  if (!firstPokemon) {
+    return res.status(400).send("There has to be a pokemon in the first slot");
+  }
+
+  try {
+    console.log(
+      `PATCH REQUEST - UPDATE TRAINER PARTY OF TRAINER (${req.params.id}):`
+    );
+
+    const trainer = await Trainer.findByPk(req.params.id, {
+      attributes: { exclude: ["password", "email"] },
+      include: [
+        {
+          model: parties,
+          attributes: [
+            "firstPokemon",
+            "secondPokemon",
+            "thirdPokemon",
+            "fourthPokemon",
+            "fifthPokemon",
+            "sixthPokemon",
+          ],
+        },
+      ],
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  const {
+    firstPokemon,
+    secondPokemon,
+    thirdPokemon,
+    fourthPokemon,
+    fifthPokemon,
+    sixthPokemon,
+  } = req.body;
+
+  await trainer.parties[0].update({
+    firstPokemon,
+    secondPokemon,
+    thirdPokemon,
+    fourthPokemon,
+    fifthPokemon,
+    sixthPokemon,
+  });
+
+  return res.status(200).send({ trainer });
+});
+
 // GET NUMBER OF TRAINERS //Can be made more efficient useing .count()
 router.get("/count", async (req, res) => {
   try {
@@ -89,6 +181,5 @@ router.get("/count", async (req, res) => {
     console.log(e);
   }
 });
-
 
 module.exports = router;
