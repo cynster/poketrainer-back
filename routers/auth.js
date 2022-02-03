@@ -5,6 +5,7 @@ const authMiddleware = require("../auth/middleware");
 const { SALT_ROUNDS } = require("../config/constants");
 
 const Trainer = require("../models").trainer;
+const Party = require("../models").Party
 const router = new Router();
 
 router.post("/login", async (req, res, next) => {
@@ -39,8 +40,9 @@ router.post("/login", async (req, res, next) => {
 router.post("/register", async (req, res) => {
   const { email, password, username } = req.body;
   if (!email || !password || !username) {
-    return res.status(400)
-    .send("Please provide an email, password and a username");
+    return res
+      .status(400)
+      .send("Please provide an email, password and a username");
   }
 
   try {
@@ -55,9 +57,8 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({
       token,
-      ...newTrainer.dataValues
+      ...newTrainer.dataValues,
     });
-
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res
@@ -71,16 +72,71 @@ router.post("/register", async (req, res) => {
   }
 });
 
+//PATCH - update trainer details
+router.patch("/:id", async (req, res) => {
+  const trainer = await Trainer.findByPk(req.params.id);
+
+  //NOT SECURE ATM
+  // if (!trainer.id === req.trainer.id) {
+  //   return res
+  //     .status(403)
+  //     .send({ message: "You are not authorized to update this trainer" });
+  // }
+
+  const { image, buddy, mainColor, secondaryColor } = req.body;
+
+  await trainer.update({ image, buddy, mainColor, secondaryColor });
+  delete trainer.dataValues["password"];
+  return res.status(200).send({ trainer });
+});
+
+//PATCH - update Trainer Party
+router.patch("/party/:id", async (req, res) => {
+  const trainer = await Trainer.findByPk(req.params.id);
+  //const party = ;
+  //NOT SECURE ATM
+  // if (!trainer.id === req.trainer.id) {
+  //   return res
+  //     .status(403)
+  //     .send({ message: "You are not authorized to update this trainer" });
+  // }
+
+  const {
+    firstPokemon,
+    secondPokemon,
+    thirdPokemon,
+    fourthPokemon,
+    fifthPokemon,
+    sixthPokemon,
+  } = req.body;
+
+  await trainer.update({ image, buddy, mainColor, secondaryColor });
+  delete trainer.dataValues["password"];
+  return res.status(200).send({ trainer });
+});
+
 // The /me endpoint can be used to:
 // - get the trainers email & name using only their token
 // - checking if a token is (still) valid
 router.get("/me", authMiddleware, async (req, res) => {
-    const trainer = await Trainer.findOne({
-      where: { trainerId: req.trainer.id },
-    });
-    // don't send back the password hash
-    delete req.trainer.dataValues["password"];
-    res.status(200).send({ ...req.trainer.dataValues });
+  const trainer = await Trainer.findOne({
+    where: { id: req.trainer.id },
   });
+  // don't send back the password hash
+  delete req.trainer.dataValues["password"];
+  res.status(200).send({ ...req.trainer.dataValues });
+});
+
+// The /me endpoint can be used to:
+// - get the trainers email & name using only their token
+// - checking if a token is (still) valid
+router.get("/me", authMiddleware, async (req, res) => {
+  const trainer = await Trainer.findOne({
+    where: { id: req.trainer.id },
+  });
+  // don't send back the password hash
+  delete req.trainer.dataValues["password"];
+  res.status(200).send({ ...req.trainer.dataValues });
+});
 
 module.exports = router;

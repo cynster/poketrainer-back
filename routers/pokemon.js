@@ -23,15 +23,34 @@ router.get("/:id", async (req, res) => {
       weight: response.data.weight, // weight in hectograms
       height: response.data.height, // height in decimetres
       type1: response.data.types[0].type.name,
-      type2: response.data.types[1] ? response.data.types[1].type.name
-        : null,
+      type2: response.data.types[1] ? response.data.types[1].type.name : null,
     };
-    res.status(200).send({ message: "ok", pokemon });
     if (!response) {
       console.log(e.message);
       res.status(404).send("Pokemon not found");
     } else {
-      res.status(200).send({ message: "ok", response });
+      res.status(200).send({ message: "ok", pokemon });
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
+router.get("/all/:number", async (req, res) => {
+  try {
+    // Making sure that data is integer
+    const number = parseInt(req.params.number);
+    console.log(`GET REQUEST - ${number} Pokemon with names:`);
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/?limit=${number}`
+    );
+    const allPokemon = response.data.results;  
+
+    if (!response) {
+      console.log(e.message);
+      res.status(404).send("Pokemon not found");
+    } else {
+      res.status(200).send({ message: "ok", allPokemon });
     }
   } catch (e) {
     console.log(e.message);
