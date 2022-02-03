@@ -5,25 +5,6 @@ const router = new Router();
 const Trainer = require("../models").trainer;
 const parties = require("../models").party;
 
-// CREATE A TRAINER
-// router.post("/", async (req, res, next) => {
-//   try {
-//     const { email, password, username } = req.body;
-//     if (!email || !password || !username) {
-//       res.status(400).send("missing parameters; email, password or username");
-//     } else {
-//       const newTrainer = await Trainer.create({
-//         email,
-//         password,
-//         username,
-//       });
-//       res.json(newTrainer);
-//     }
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-
 // GET ALL TRAINERS
 router.get("/", async (req, res) => {
   try {
@@ -62,7 +43,7 @@ router.get("/", async (req, res) => {
 router.get("/trainer/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    console.log(`GET REQUEST - Trainer by id:`);
+    console.log(`GET REQUEST - Trainer by id(${id}):`);
     const trainer = await Trainer.findByPk(id, {
       attributes: { exclude: ["password", "email"] },
       include: [
@@ -108,5 +89,6 @@ router.get("/count", async (req, res) => {
     console.log(e);
   }
 });
+
 
 module.exports = router;
