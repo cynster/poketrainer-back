@@ -73,16 +73,30 @@ router.get("/trainer/:id", async (req, res) => {
   }
 });
 
+//PATCH - UPDATE BADGES OF A TRAINER
+router.patch("/badges/:id", async (req, res) => {
+  const { badge1, badge2, badge3, badge4, badge5, badge6, badge7, badge8 } =
+    req.body;
+
+  const trainer = await Trainer.findByPk(req.params.id);
+
+  await trainer.update({
+    badge1,
+    badge2,
+    badge3,
+    badge4,
+    badge5,
+    badge6,
+    badge7,
+    badge8,
+  });
+  delete trainer.dataValues["password"];
+  return res.status(200).send({ trainer });
+});
+
 //PATCH - UPDATE SPECIFIC TRAINER
 router.patch("/:id", async (req, res) => {
   const trainer = await Trainer.findByPk(req.params.id);
-
-  //NOT SECURE ATM
-  // if (!trainer.id === req.trainer.id) {
-  //   return res
-  //     .status(403)
-  //     .send({ message: "You are not authorized to update this trainer" });
-  // }
 
   const { image, buddy, mainColor, secondaryColor } = req.body;
 
