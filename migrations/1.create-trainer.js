@@ -29,6 +29,30 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
+      badge1: {
+        type: Sequelize.BOOLEAN
+      },
+      badge2: {
+        type: Sequelize.BOOLEAN
+      },
+      badge3: {
+        type: Sequelize.BOOLEAN
+      },
+      badge4: {
+        type: Sequelize.BOOLEAN
+      },
+      badge5: {
+        type: Sequelize.BOOLEAN
+      },
+      badge6: {
+        type: Sequelize.BOOLEAN
+      },
+      badge7: {
+        type: Sequelize.BOOLEAN
+      },
+      badge8: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

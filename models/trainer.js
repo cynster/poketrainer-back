@@ -50,6 +50,38 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING, 
         allowNull: true,
       },
+      badge1: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge2: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge3: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge4: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge5: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge6: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge7: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
+      badge8: {
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false,
+      },
     },
     {
       sequelize,
