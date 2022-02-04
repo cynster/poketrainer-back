@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         through: "trainersBadges",
         foreignKey: "trainerId",
       });
+      // trainer.hasOne(models.pokemonparty)
     }
   }
   trainer.init(
@@ -35,51 +36,51 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       mainColor: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: true,
       },
       secondaryColor: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: true,
       },
       buddy: {
-        type: DataTypes.INTEGER, 
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       image: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: true,
       },
       badge1: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge2: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge3: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge4: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge5: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge6: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge7: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       badge8: {
-        type: DataTypes.BOOLEAN, 
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
     },

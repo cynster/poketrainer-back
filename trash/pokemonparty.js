@@ -1,21 +1,18 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class party extends Model {
+  class pokemonparty extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      party.belongsToMany(models.trainer, {
-        through: "trainersParties",
-        foreignKey: "partyId",
-      });
+      // define association here
+      // pokemonparty.belongsTo(models.trainer)
     }
   }
-
-  party.init(
+  pokemonparty.init(
     {
       firstPokemon: {
         type: DataTypes.INTEGER,
@@ -42,11 +39,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      partyName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
-      modelName: "party",
+      modelName: "pokemonparty",
     }
   );
-  return party;
+  return pokemonparty;
 };

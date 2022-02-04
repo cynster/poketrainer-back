@@ -1,10 +1,10 @@
 // Import Express router
 const { Router } = require("express");
 const router = new Router();
-
+const Pokemonparty = require("../models").pokemonparties;
 const Trainer = require("../models").trainer;
-const parties = require("../models").party;
-const trainersParties = require("../models").trainersParties;
+const Party = require("../models").party;
+const TrainersParties = require("../models").trainersParties;
 
 // GET ALL TRAINERS
 router.get("/", async (req, res) => {
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
       offset,
       include: [
         {
-          model: parties,
+          model: Party,
           attributes: [
             "firstPokemon",
             "secondPokemon",
@@ -49,7 +49,7 @@ router.get("/trainer/:id", async (req, res) => {
       attributes: { exclude: ["password", "email"] },
       include: [
         {
-          model: parties,
+          model: Party,
           attributes: [
             "firstPokemon",
             "secondPokemon",
@@ -107,18 +107,31 @@ router.patch("/:id", async (req, res) => {
 
 // POST - CREATE NEW POKEMON PARTY
 router.post("/party/:id", async (req, res) => {
-  console.log(
-    `POST - CREATE NEW TRAINER PARTY FOR TRAINER (${req.params.id}):`
-  );
   try {
+    console.log(
+      `POST - CREATE NEW TRAINER PARTY FOR TRAINER (${req.params.id}):`
+    );
+
+    // Get random starter
+    const starters = [25, 1, 4, 7];
+    const randomStarter = starters[Math.floor(Math.random() * starters.length)];
+
     const newParty = await Party.create({
-      firstPokemon: 25,
+      firstPokemon: randomStarter,
       secondPokemon: null,
       thirdPokemon: null,
       fourthPokemon: null,
       fifthPokemon: null,
       sixthPokemon: null,
     });
+
+    console.log("newparty", newParty);
+    const setRelationsTrainersParties = await TrainersParties.create({
+      partyId: newParty.id,
+      trainerId: parseInt(req.params.id),
+    });
+    console.log("jointable", setRelationsTrainersParties);
+    res.send(newParty);
   } catch (e) {
     res.send("Something went wrong");
     console.log(`GOT ERROR:`);
@@ -189,6 +202,32 @@ router.get("/count", async (req, res) => {
         .status(200)
         .send({ message: "ok", trainersCount: trainersCount.length });
     }
+  } catch (e) {
+    res.send("Something went wrong");
+    console.log(`GOT ERROR:`);
+    console.log(e);
+  }
+});
+
+// GET ALL TRAINERS
+router.get("/pokemonparties", async (req, res) => {
+  try {
+    const trainers = await Trainer.findAndCountAll({
+      include: {
+        model: Pokemonparty,
+        //where: Trainer.pokemonpartyId === Pokemonparty.id,
+        attributes: [
+          "firstPokemon",
+          "secondPokemon",
+          "thirdPokemon",
+          "fourthPokemon",
+          "fifthPokemon",
+          "sixthPokemon",
+        ],
+      },
+      //attributes: { exclude: ["password", "email"] },
+    });
+    res.status(200).send({ message: "ok", trainers });
   } catch (e) {
     res.send("Something went wrong");
     console.log(`GOT ERROR:`);
